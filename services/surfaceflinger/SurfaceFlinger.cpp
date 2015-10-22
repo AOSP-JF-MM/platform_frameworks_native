@@ -1963,7 +1963,7 @@ bool SurfaceFlinger::doComposeSurfaces(const sp<const DisplayDevice>& hw, const 
             // screen is already cleared here
             if (!region.isEmpty()) {
                 // can happen with SurfaceView
-                drawWormhole(hw, region);
+                drawWormHoleIfRequired(cur, end, hw, region);
             }
         }
 
@@ -3559,6 +3559,13 @@ bool SurfaceFlinger::canDrawLayerinScreenShot(
         const sp<const DisplayDevice>& /*hw*/,
         const sp<Layer>& layer) {
     return layer->isVisible();
+}
+
+void SurfaceFlinger::drawWormHoleIfRequired(HWComposer::LayerListIterator& /*cur*/,
+        const HWComposer::LayerListIterator& /*end*/,
+        const sp<const DisplayDevice>& hw,
+        const Region& region) {
+    drawWormhole(hw, region);
 }
 
 // ---------------------------------------------------------------------------
