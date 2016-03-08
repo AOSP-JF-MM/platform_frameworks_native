@@ -313,7 +313,7 @@ public:
                              const State& /*state*/) { }
     virtual void setAcquiredFenceIfBlit(int& /*fenceFd */,
                        HWComposer::HWCLayerInterface& /*layer */) { }
-    virtual bool canAllowGPUForProtected() const { return false; }
+    virtual bool canAllowGPUForProtected() const;
 
     /*
      * returns the rectangle that crops the content of the layer and scales it
@@ -451,6 +451,7 @@ private:
     uint64_t mLastFrameNumberReceived;
     bool mUpdateTexImageFailed; // This is only modified from the main thread
     uint32_t mTransformHint;
+    bool mIsGPUAllowedForProtected;
 };
 
 // ---------------------------------------------------------------------------
