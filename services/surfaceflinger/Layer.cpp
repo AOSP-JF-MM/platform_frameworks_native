@@ -122,8 +122,6 @@ Layer::Layer(SurfaceFlinger* flinger, const sp<Client>& client,
     nsecs_t displayPeriod =
             flinger->getHwComposer().getRefreshPeriod(HWC_DISPLAY_PRIMARY);
     mFrameTracker.setDisplayRefreshPeriod(displayPeriod);
-
-    mIsGPUAllowedForProtected = property_get_bool("persist.gralloc.cp.level3", false);
 }
 
 void Layer::onFirstRef() {
@@ -1583,14 +1581,6 @@ void Layer::logFrameStats() {
 
 void Layer::getFrameStats(FrameStats* outStats) const {
     mFrameTracker.getStats(outStats);
-}
-
-bool Layer::canAllowGPUForProtected() const {
-    if(isProtected()) {
-        return mIsGPUAllowedForProtected;
-    } else {
-        return false;
-    }
 }
 
 // ---------------------------------------------------------------------------

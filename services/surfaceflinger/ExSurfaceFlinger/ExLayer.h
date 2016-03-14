@@ -55,6 +55,7 @@ public:
                              HWComposer::HWCLayerInterface& layer, const State& state);
     virtual void setAcquiredFenceIfBlit(int &fenceFd,
                              HWComposer::HWCLayerInterface& layer);
+    virtual bool canAllowGPUForProtected() const;
 
 protected:
     bool mDebugLogs;
