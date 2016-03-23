@@ -513,30 +513,16 @@ static bool verifyKernelTraceFuncs(const char* funcs)
         return false;
     }
 
-    // read back the filter
-    ssize_t n = 0;
-    ssize_t len = 0;
-    char *r;
-    char *buf = NULL;
-    do {
-        len += n;
-        r = (char *) realloc(buf, len + 4096);
-        if (r == NULL)
-            break;
-        buf = r;
-    } while ( (n = read(fd, (void *)(buf + len), 4095)) > 0 );
-
-    if ( ( n == -1 ) || ( r == NULL ) ) {
-            fprintf(stderr, "error reading %s: %s (%d)\n", k_ftraceFilterPath,
-                strerror(errno), errno);
-            close(fd);
-            free(buf);
-            return false;
+    char buf[4097];
+    ssize_t n = read(fd, buf, 4096);
+    close(fd);
+    if (n == -1) {
+        fprintf(stderr, "error reading %s: %s (%d)\n", k_ftraceFilterPath,
+            strerror(errno), errno);
+        return false;
     }
 
-    buf[len] = '\0';
-    close(fd);
-
+    buf[n] = '\0';
     String8 funcList = String8::format("\n%s", buf);
 
     // Make sure that every function listed in funcs is in the list we just
@@ -556,8 +542,8 @@ static bool verifyKernelTraceFuncs(const char* funcs)
         }
         func = strtok(NULL, ",");
     }
-    free(buf);
     free(myFuncs);
+
     return ok;
 }
 
